@@ -1,26 +1,22 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
 func (a *applicationDependencies) healthcheckHandler(w http.ResponseWriter,
 	r *http.Request) {
-	data := map[string]string{
-		"status":      "available",
-		"environment": a.config.environment,
-		"version":     appVersion,
-	}
-	jsResponse, err := json.Marshal(data)
-	if err != nil {
-		a.logger.Error(err.Error())
-		http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
-		return
+	data := envelope{
+		"status": "available",
+		"system_info": map[string]string{
+			"environment": a.config.environment,
+			"version":     appVersion,
+		},
 	}
 
-	jsResponse = append(jsResponse, '\n')
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(jsResponse)
+	err := a.writeJSON(w, http.StatusOK, data, nil)
+	if err != nil {
+		a.serverErrorResponse(w, r, err)
+	}
 
 }
