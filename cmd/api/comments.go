@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	// import the data package which contains the definition for Comment
-	//"github.com/Jwe891116/craboo/cmd/api/internal/data"
+	//"github.com/Jwe891116/craboo/internal/data"
 )
 
 func (a *applicationDependencies) createCommentHandler(w http.ResponseWriter,
